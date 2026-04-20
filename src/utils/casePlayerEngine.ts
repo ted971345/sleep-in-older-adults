@@ -166,19 +166,16 @@ const scoreDomain = (
   const missedOptionIds = targetOptionIds.filter(
     (id) => !selectedOptionIds.has(id),
   );
-  const selectedCount = selectedOptionIds.size;
-  const unrelatedSelectionCount = Math.max(
-    0,
-    selectedCount - identifiedOptionIds.length,
-  );
   const rawScore =
     targetOptionIds.length === 0
       ? 0
       : (identifiedOptionIds.length / targetOptionIds.length) * maxPoints;
-  const penalty = Math.min(maxPoints, unrelatedSelectionCount * 0.25);
 
   return {
-    earnedPoints: Math.max(0, Math.round(rawScore - penalty)),
+    // The formative rubric measures coverage of instructor-defined reasoning
+    // targets. Over-selection is handled at the individual step level so this
+    // summary does not double-penalize reasonable selections from other stages.
+    earnedPoints: Math.max(0, Math.round(rawScore)),
     identifiedOptionIds,
     missedOptionIds,
   };
