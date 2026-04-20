@@ -111,6 +111,11 @@ export const CasePlayer = ({ caseItem }: CasePlayerProps) => {
   };
 
   const continueStep = () => {
+    if (activeStep.kind === "feedback" && isLastStep) {
+      window.location.hash = `#/reflection?caseId=${caseItem.id}`;
+      return;
+    }
+
     if (activeStep.kind === "feedback" || submitted) {
       setActiveIndex((current) =>
         Math.min(current + 1, caseItem.player.steps.length - 1),
