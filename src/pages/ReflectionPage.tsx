@@ -156,8 +156,8 @@ export const ReflectionPage = () => {
               <dd>{confidence}/5</dd>
             </div>
             <div>
-              <dt>Difficulty</dt>
-              <dd>{activeCase.difficulty}</dd>
+              <dt>Class Use</dt>
+              <dd>Small-group discussion</dd>
             </div>
           </dl>
 

@@ -42,7 +42,7 @@ export const CaseLibraryPage = () => (
             />
           </div>
           <div className="case-card__meta">
-            <span>{caseItem.difficulty}</span>
+            <span>Group case</span>
             <span>{formatMinutes(caseItem.estimatedMinutes)}</span>
           </div>
           <h2>{caseItem.title}</h2>
