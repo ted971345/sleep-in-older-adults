@@ -40,6 +40,45 @@ type CaseSeed = {
   referenceIds: string[];
 };
 
+const caseImages: Record<string, SleepCase["image"]> = {
+  "case-normal-aging-vs-concern": {
+    src: "./images/cases/normal-aging.jpg",
+    alt: "Older adult walking outdoors in morning light, representing age-associated sleep timing and preserved function.",
+    credit: "Pixabay Content License",
+    sourceUrl: "https://pixabay.com/photos/old-man-walking-pathway-morning-7531093/",
+  },
+  "case-chronic-insomnia": {
+    src: "./images/cases/chronic-insomnia.jpg",
+    alt: "Illustration of a bedroom at night, representing wakefulness and conditioned arousal.",
+    credit: "Pixabay Content License",
+    sourceUrl: "https://pixabay.com/illustrations/insomnia-sleep-bed-night-7259107/",
+  },
+  "case-possible-osa": {
+    src: "./images/cases/possible-osa.jpg",
+    alt: "Dim bedroom with bedside light, representing sleep environment and breathing-related sleep disruption.",
+    credit: "Pixabay Content License",
+    sourceUrl: "https://pixabay.com/photos/bedroom-lamp-night-sleep-room-552565/",
+  },
+  "case-possible-rls": {
+    src: "./images/cases/possible-rls.jpg",
+    alt: "Feet resting under bedding, representing leg symptoms that affect sleep onset.",
+    credit: "Pixabay Content License",
+    sourceUrl: "https://pixabay.com/photos/feet-sleep-bed-comfortable-cozy-1466901/",
+  },
+  "case-otc-pm-medication": {
+    src: "./images/cases/otc-pm-medication.jpg",
+    alt: "Unbranded pills, representing over-the-counter medication review and anticholinergic risk.",
+    credit: "Pixabay Content License",
+    sourceUrl: "https://pixabay.com/photos/pills-prescription-bottle-medicine-1885550/",
+  },
+  "case-multifactorial-falls-nocturia": {
+    src: "./images/cases/falls-nocturia.jpg",
+    alt: "Dim hallway in a home, representing nighttime bathroom trips and falls prevention.",
+    credit: "Pixabay Content License",
+    sourceUrl: "https://pixabay.com/photos/house-hallway-light-home-night-6982804/",
+  },
+};
+
 const option = (
   id: string,
   label: string,
@@ -145,6 +184,7 @@ const makeCase = (seed: CaseSeed): SleepCase => ({
   difficulty: seed.difficulty,
   estimatedMinutes: seed.estimatedMinutes,
   tags: seed.tags,
+  image: caseImages[seed.id],
   patient: seed.patient,
   learningObjectives: seed.learningObjectives,
   reasoningPathways: seed.reasoningPathways,

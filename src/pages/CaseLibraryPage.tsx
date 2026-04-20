@@ -27,6 +27,14 @@ export const CaseLibraryPage = () => (
     <div className="card-grid">
       {cases.map((caseItem) => (
         <article className="case-card" key={caseItem.id}>
+          {caseItem.image && (
+            <img
+              alt={caseItem.image.alt}
+              className="case-card__image"
+              loading="lazy"
+              src={caseItem.image.src}
+            />
+          )}
           <div className="case-card__visual">
             <ClinicalIcon
               name={caseIconByTag[caseItem.tags[0]] ?? "sleep"}

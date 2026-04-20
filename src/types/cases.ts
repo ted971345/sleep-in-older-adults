@@ -28,6 +28,13 @@ export type PatientProfile = {
   relevantHistory: string[];
 };
 
+export type CaseImage = {
+  src: string;
+  alt: string;
+  credit: string;
+  sourceUrl: string;
+};
+
 export type CaseStep = {
   id: string;
   title: string;
@@ -45,6 +52,7 @@ export type SleepCase = {
   difficulty: CaseDifficulty;
   estimatedMinutes: number;
   tags: CaseTag[];
+  image?: CaseImage;
   patient: PatientProfile;
   learningObjectives: LearningObjective[];
   reasoningPathways: string[];

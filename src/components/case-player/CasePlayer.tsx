@@ -160,6 +160,18 @@ export const CasePlayer = ({ caseItem }: CasePlayerProps) => {
 
   return (
     <div className="interactive-player">
+      {caseItem.image && (
+        <figure className="case-image-panel">
+          <img alt={caseItem.image.alt} src={caseItem.image.src} />
+          <figcaption>
+            Image source:{" "}
+            <a href={caseItem.image.sourceUrl} rel="noreferrer" target="_blank">
+              {caseItem.image.credit}
+            </a>
+          </figcaption>
+        </figure>
+      )}
+
       <div className="progress-strip" aria-label="Case progress">
         {caseItem.player.steps.map((step, index) => (
           <button
