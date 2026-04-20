@@ -1,7 +1,6 @@
 import { CaseCardsIllustration } from "../components/illustrations/CaseCardsIllustration";
 import { ClinicalIcon, type ClinicalIconName } from "../components/visuals/ClinicalIcon";
 import { cases } from "../data/cases";
-import { formatMinutes } from "../utils/format";
 
 const caseIconByTag: Record<string, ClinicalIconName> = {
   "normal-aging": "light",
@@ -43,7 +42,7 @@ export const CaseLibraryPage = () => (
           </div>
           <div className="case-card__meta">
             <span>Group case</span>
-            <span>{formatMinutes(caseItem.estimatedMinutes)}</span>
+            <span>Case reasoning lab</span>
           </div>
           <h2>{caseItem.title}</h2>
           <p>{caseItem.teaser}</p>
