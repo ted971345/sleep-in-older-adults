@@ -21,13 +21,13 @@ const teachingVisuals: TeachingVisual[] = [
     metric: "Timing",
   },
   {
-    title: "OSA mechanism",
+    title: "Obstructive sleep apnea (OSA) mechanism",
     copy: "Connect airway obstruction, arousals, oxygen stress, and cardiometabolic risk.",
     icon: "breathing",
     metric: "Airflow",
   },
   {
-    title: "RLS clues",
+    title: "Restless legs syndrome (RLS) clues",
     copy: "Look for urge to move, rest worsening, evening pattern, and movement relief.",
     icon: "legs",
     metric: "Movement",
