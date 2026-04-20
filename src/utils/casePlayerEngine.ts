@@ -1,0 +1,205 @@
+import type {
+  CaseInfoItem,
+  FormativeFeedbackRubric,
+  FormativeFeedbackResult,
+  ReasoningStep,
+  SelectableOption,
+  StepEvaluation,
+  StepResponse,
+} from "../types";
+
+export const getInitialRevealedInfoIds = (initialInfoIds: string[]) =>
+  new Set(initialInfoIds);
+
+export const getRevealedInfoItems = (
+  information: CaseInfoItem[],
+  revealedInfoIds: Set<string>,
+) => information.filter((item) => revealedInfoIds.has(item.id));
+
+export const findStepResponse = (
+  responses: StepResponse[],
+  stepId: string,
+): StepResponse | undefined =>
+  responses.find((response) => response.stepId === stepId);
+
+export const canSubmitStep = (
+  step: ReasoningStep,
+  selectedOptionIds: string[],
+) => {
+  if (step.kind === "feedback") {
+    return true;
+  }
+
+  if (step.kind === "follow-up") {
+    return (
+      selectedOptionIds.length >= step.minSelections &&
+      selectedOptionIds.length <= step.maxSelections
+    );
+  }
+
+  if (step.kind === "classification") {
+    return selectedOptionIds.length === 1;
+  }
+
+  return selectedOptionIds.length > 0;
+};
+
+export const getStepTargets = (step: ReasoningStep) => {
+  if (step.kind === "follow-up") {
+    return step.highValueOptionIds;
+  }
+
+  if (step.kind === "prioritization") {
+    return step.preferredOrder;
+  }
+
+  if (step.kind === "feedback") {
+    return [];
+  }
+
+  return step.correctOptionIds;
+};
+
+export const evaluateStep = (
+  step: ReasoningStep,
+  selectedOptionIds: string[],
+): StepEvaluation => {
+  const targets = getStepTargets(step);
+
+  if (step.kind === "feedback") {
+    return {
+      stepId: step.id,
+      earned: 0,
+      possible: 0,
+      matchedOptionIds: [],
+      missedOptionIds: [],
+      misplacedOptionIds: [],
+    };
+  }
+
+  if (step.kind === "prioritization") {
+    const matchedOptionIds = selectedOptionIds.filter(
+      (optionId, index) => targets[index] === optionId,
+    );
+    const misplacedOptionIds = selectedOptionIds.filter(
+      (optionId, index) => targets[index] !== optionId,
+    );
+
+    return {
+      stepId: step.id,
+      earned: matchedOptionIds.length,
+      possible: targets.length,
+      matchedOptionIds,
+      missedOptionIds: targets.filter((id) => !selectedOptionIds.includes(id)),
+      misplacedOptionIds,
+    };
+  }
+
+  const matchedOptionIds = selectedOptionIds.filter((id) =>
+    targets.includes(id),
+  );
+
+  return {
+    stepId: step.id,
+    earned: matchedOptionIds.length,
+    possible: targets.length,
+    matchedOptionIds,
+    missedOptionIds: targets.filter((id) => !selectedOptionIds.includes(id)),
+    misplacedOptionIds: [],
+  };
+};
+
+export const getNewRevealIds = (
+  options: SelectableOption[],
+  selectedOptionIds: string[],
+  revealedInfoIds: Set<string>,
+) =>
+  options
+    .filter((option) => selectedOptionIds.includes(option.id))
+    .flatMap((option) => option.reveals ?? [])
+    .filter((infoId) => !revealedInfoIds.has(infoId));
+
+export const getTotalEvaluation = (evaluations: StepEvaluation[]) => {
+  const earned = evaluations.reduce((sum, item) => sum + item.earned, 0);
+  const possible = evaluations.reduce((sum, item) => sum + item.possible, 0);
+
+  return {
+    earned,
+    possible,
+    percent: possible === 0 ? 0 : Math.round((earned / possible) * 100),
+  };
+};
+
+const getSelectedOptionIds = (responses: StepResponse[]) =>
+  new Set(responses.flatMap((response) => response.selectedOptionIds));
+
+const scoreDomain = (
+  targetOptionIds: string[],
+  selectedOptionIds: Set<string>,
+  maxPoints: number,
+) => {
+  const identifiedOptionIds = targetOptionIds.filter((id) =>
+    selectedOptionIds.has(id),
+  );
+  const missedOptionIds = targetOptionIds.filter(
+    (id) => !selectedOptionIds.has(id),
+  );
+
+  return {
+    earnedPoints:
+      targetOptionIds.length === 0
+        ? 0
+        : Math.round((identifiedOptionIds.length / targetOptionIds.length) * maxPoints),
+    identifiedOptionIds,
+    missedOptionIds,
+  };
+};
+
+export const buildFormativeFeedback = (
+  rubric: FormativeFeedbackRubric,
+  responses: StepResponse[],
+): FormativeFeedbackResult => {
+  const selectedOptionIds = getSelectedOptionIds(responses);
+
+  // Instructor note: this engine is deliberately rule-based and transparent.
+  // To expand the rubric, add target option ids in case data before changing code.
+  const domains = rubric.domains.map((domain) => {
+    const scored = scoreDomain(
+      domain.targetOptionIds,
+      selectedOptionIds,
+      domain.maxPoints,
+    );
+
+    return {
+      ...domain,
+      ...scored,
+    };
+  });
+
+  const diagnosticClues = rubric.diagnosticClues.map((clue) => ({
+    ...clue,
+    wasAddressed: clue.relatedOptionIds.some((id) => selectedOptionIds.has(id)),
+  }));
+
+  const fourMs = rubric.fourMs.map((item) => ({
+    ...item,
+    wasAddressed: item.relatedOptionIds.some((id) => selectedOptionIds.has(id)),
+  }));
+
+  const totalEarned = domains.reduce(
+    (sum, domain) => sum + domain.earnedPoints,
+    0,
+  );
+  const totalPossible = domains.reduce(
+    (sum, domain) => sum + domain.maxPoints,
+    0,
+  );
+
+  return {
+    domains,
+    diagnosticClues,
+    fourMs,
+    totalEarned,
+    totalPossible,
+  };
+};
