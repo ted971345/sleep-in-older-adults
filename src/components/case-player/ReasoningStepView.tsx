@@ -3,7 +3,8 @@ import type {
   ReasoningStep,
   StepEvaluation,
 } from "../../types";
-import { canSubmitStep } from "../../utils/casePlayerEngine";
+import { useMemo } from "react";
+import { canSubmitStep, getDisplayOptions } from "../../utils/casePlayerEngine";
 import { FormativeFeedbackPanel } from "./FormativeFeedbackPanel";
 import { OptionControl } from "./OptionControl";
 import { StepFeedback } from "./StepFeedback";
@@ -38,6 +39,7 @@ export const ReasoningStepView = ({
   submitted,
 }: ReasoningStepViewProps) => {
   const readyToSubmit = canSubmitStep(step, selectedOptionIds);
+  const displayOptions = useMemo(() => getDisplayOptions(step), [step]);
   const showCompletion = submitted && step.kind !== "feedback";
 
   return (
@@ -59,11 +61,12 @@ export const ReasoningStepView = ({
 
       {step.kind === "prioritization" && (
         <p className="selection-guidance">
-          Select actions in priority order. The number marks your sequence.
+          Select exactly {step.preferredOrder.length} actions in priority order.
+          Options are intentionally mixed; the number marks your sequence.
         </p>
       )}
 
-      {(step.kind === "red-flags" || step.kind === "recommendations") &&
+      {step.kind === "red-flags" &&
         step.maxSelections !== undefined && (
           <p className="selection-guidance">
             Select up to {step.maxSelections} item
@@ -72,9 +75,19 @@ export const ReasoningStepView = ({
           </p>
         )}
 
+      {step.kind === "recommendations" &&
+        step.maxSelections !== undefined && (
+          <p className="selection-guidance">
+            Select exactly {step.maxSelections} recommendation
+            {step.maxSelections === 1 ? "" : "s"} for this patient now. Some
+            options may be generally reasonable but lower priority, unsafe, or
+            not yet indicated.
+          </p>
+        )}
+
       {"options" in step && (
         <div className="option-list">
-          {step.options.map((option) => (
+          {displayOptions.map((option) => (
             <OptionControl
               checked={selectedOptionIds.includes(option.id)}
               disabled={submitted}

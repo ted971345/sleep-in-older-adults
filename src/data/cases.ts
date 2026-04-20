@@ -289,6 +289,7 @@ export const cases: SleepCase[] = [
         option("normal-priority-education", "Teach age-associated sleep changes, morning light, activity, and consistent wake time.", "Education supports self-efficacy and avoids medicalizing normal variation."),
         option("normal-priority-monitor", "Set return precautions for new sleepiness, falls, mood change, snoring, or functional decline.", "Monitoring keeps the plan safe without over-testing."),
         option("normal-priority-avoid-med", "Avoid starting a hypnotic or over-the-counter (OTC) PM medication.", "Medication risk outweighs benefit when symptoms are mild and function is preserved."),
+        option("normal-priority-testing", "Order sleep testing immediately to prove the sleep change is benign.", "Testing can be appropriate when symptoms suggest a disorder, but the negative screen and preserved function make it low priority here."),
       ],
     },
     recommendations: {
@@ -381,6 +382,7 @@ export const cases: SleepCase[] = [
         option("insomnia-priority-cbti", "Start cognitive behavioral therapy for insomnia (CBT-I)-oriented care: stimulus control, sleep restriction principles, and sleep diary.", "Cognitive behavioral therapy for insomnia (CBT-I) targets the maintaining mechanisms of chronic insomnia."),
         option("insomnia-priority-caffeine", "Move caffeine earlier and reduce time awake in bed.", "These are modifiable perpetuating factors."),
         option("insomnia-priority-med-safety", "Discuss medication risks and avoid benzodiazepines or over-the-counter (OTC) PM sleep-aid products.", "Age-friendly prescribing requires harm avoidance."),
+        option("insomnia-priority-hypnotic", "Begin a hypnotic first so he can get quick relief before behavioral work.", "A quick medication-first plan does not address perpetuating behaviors and adds avoidable older-adult risk."),
       ],
     },
     recommendations: {
@@ -474,6 +476,7 @@ export const cases: SleepCase[] = [
         option("osa-priority-testing", "Arrange appropriate sleep apnea diagnostic testing.", "Diagnosis is needed before treatment decisions such as positive airway pressure (PAP) therapy."),
         option("osa-priority-comorbid", "Coordinate blood pressure, atrial fibrillation, and cognitive follow-up.", "Obstructive sleep apnea (OSA) care should be integrated with comorbidity management."),
         option("osa-priority-behavior", "Discuss alcohol moderation, sleep position, and weight-sensitive counseling without delaying testing.", "Behavioral measures can support care but do not replace diagnostic evaluation."),
+        option("osa-priority-sleep-hygiene", "Start with generic sleep hygiene and reassess the breathing symptoms later.", "General sleep advice should not delay safety counseling or diagnostic evaluation when obstructive sleep apnea (OSA) risk is high."),
       ],
     },
     recommendations: {
@@ -566,6 +569,7 @@ export const cases: SleepCase[] = [
         option("rls-priority-iron", "Order ferritin and transferrin saturation.", "Iron results guide whether iron replacement is appropriate."),
         option("rls-priority-exacerbators", "Reduce exacerbating medications when feasible and coordinate with prescribers.", "Addressing triggers may reduce symptoms without adding sedating medication."),
         option("rls-priority-treatment", "Discuss evidence-based restless legs syndrome (RLS) treatments if symptoms remain clinically significant.", "Treatment choice should reflect kidney function, fall risk, and patient goals."),
+        option("rls-priority-medication-first", "Start a chronic restless legs syndrome (RLS) medication before confirming iron status or mimics.", "Medication may be needed later, but jumping ahead can miss reversible contributors and increase adverse effects."),
       ],
     },
     recommendations: {
@@ -658,6 +662,7 @@ export const cases: SleepCase[] = [
         option("pm-priority-deprescribe", "Create a patient-centered plan to stop diphenhydramine and avoid similar over-the-counter (OTC) PM-labeled products.", "Removing the offending drug is central."),
         option("pm-priority-pain", "Treat osteoarthritis pain with non-sedating approaches.", "If pain remains untreated, the patient may restart the over-the-counter (OTC) PM product."),
         option("pm-priority-sleep", "Add behavioral sleep supports after medication and pain contributors are addressed.", "Sleep routine support helps maintain the change."),
+        option("pm-priority-replace-sedative", "Replace the over-the-counter (OTC) PM product with another sedating sleep medication.", "This preserves the same safety problem rather than addressing anticholinergic burden, pain, and falls."),
       ],
     },
     recommendations: {
@@ -754,6 +759,7 @@ export const cases: SleepCase[] = [
         option("multi-priority-med-review", "Reduce sleep-disrupting or sedating medication contributors with the prescribing clinician.", "Diuretic timing and diphenhydramine are modifiable contributors."),
         option("multi-priority-osa", "Assess obstructive sleep apnea (OSA) risk and arrange appropriate testing.", "Breathing clues and sleepiness make obstructive sleep apnea (OSA) evaluation important."),
         option("multi-priority-cbti", "Begin behavioral insomnia strategies tailored to her routine.", "Behavioral treatment is appropriate once safety and medication issues are addressed."),
+        option("multi-priority-sleep-hygiene-only", "Focus on sleep hygiene alone and revisit falls after sleep improves.", "This under-prioritizes immediate fall risk, sedating medication exposure, nocturia, and possible obstructive sleep apnea (OSA)."),
       ],
     },
     recommendations: {

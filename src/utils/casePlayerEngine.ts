@@ -41,8 +41,19 @@ export const canSubmitStep = (
     return selectedOptionIds.length === 1;
   }
 
+  if (step.kind === "prioritization") {
+    return selectedOptionIds.length === step.preferredOrder.length;
+  }
+
   if (
-    (step.kind === "red-flags" || step.kind === "recommendations") &&
+    step.kind === "recommendations" &&
+    step.maxSelections !== undefined
+  ) {
+    return selectedOptionIds.length === step.maxSelections;
+  }
+
+  if (
+    step.kind === "red-flags" &&
     step.maxSelections !== undefined
   ) {
     return (
@@ -68,6 +79,24 @@ export const getStepTargets = (step: ReasoningStep) => {
   }
 
   return step.correctOptionIds;
+};
+
+const stableHash = (value: string) =>
+  [...value].reduce((hash, char) => {
+    const nextHash = (hash << 5) - hash + char.charCodeAt(0);
+    return nextHash | 0;
+  }, 0);
+
+export const getDisplayOptions = (step: ReasoningStep): SelectableOption[] => {
+  if (!("options" in step)) {
+    return [];
+  }
+
+  return [...step.options].sort((first, second) => {
+    const firstScore = stableHash(`${step.id}:${first.id}`);
+    const secondScore = stableHash(`${step.id}:${second.id}`);
+    return firstScore - secondScore;
+  });
 };
 
 export const evaluateStep = (

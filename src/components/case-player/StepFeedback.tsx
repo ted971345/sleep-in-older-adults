@@ -1,5 +1,5 @@
 import type { ReasoningStep, StepEvaluation } from "../../types";
-import { getStepTargets } from "../../utils/casePlayerEngine";
+import { getDisplayOptions, getStepTargets } from "../../utils/casePlayerEngine";
 
 type StepFeedbackProps = {
   evaluation: StepEvaluation;
@@ -17,6 +17,7 @@ export const StepFeedback = ({
   }
 
   const targetIds = getStepTargets(step);
+  const displayOptions = getDisplayOptions(step);
 
   return (
     <div className="step-feedback" aria-live="polite">
@@ -36,7 +37,7 @@ export const StepFeedback = ({
         </p>
       )}
       <div className="feedback-list">
-        {step.options.map((option) => {
+        {displayOptions.map((option) => {
           const selected = selectedOptionIds.includes(option.id);
           const target = targetIds.includes(option.id);
 
