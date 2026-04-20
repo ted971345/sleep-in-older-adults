@@ -24,6 +24,15 @@ export const StepFeedback = ({
       {evaluation.possible > 0 && (
         <p>
           Score for this step: {evaluation.earned} of {evaluation.possible}
+          {evaluation.penalty > 0
+            ? ` after ${evaluation.penalty} point${evaluation.penalty === 1 ? "" : "s"} for lower-value selections`
+            : ""}
+        </p>
+      )}
+      {evaluation.incorrectOptionIds.length > 0 && (
+        <p className="feedback-caution">
+          You selected some lower-priority or non-indicated items. In clinical
+          reasoning, more is not always better.
         </p>
       )}
       <div className="feedback-list">
@@ -38,7 +47,12 @@ export const StepFeedback = ({
           return (
             <article className="feedback-item" key={option.id}>
               <strong>
-                {selected ? "Selected" : "Missed"}: {option.label}
+                {selected && target
+                  ? "Appropriate selection"
+                  : selected
+                    ? "Lower-priority selection"
+                    : "Missed"}
+                : {option.label}
               </strong>
               <p>{option.rationale}</p>
             </article>

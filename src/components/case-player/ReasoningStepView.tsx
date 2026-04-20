@@ -63,6 +63,15 @@ export const ReasoningStepView = ({
         </p>
       )}
 
+      {(step.kind === "red-flags" || step.kind === "recommendations") &&
+        step.maxSelections !== undefined && (
+          <p className="selection-guidance">
+            Select up to {step.maxSelections} item
+            {step.maxSelections === 1 ? "" : "s"}. Extra low-priority choices
+            reduce the score.
+          </p>
+        )}
+
       {"options" in step && (
         <div className="option-list">
           {step.options.map((option) => (

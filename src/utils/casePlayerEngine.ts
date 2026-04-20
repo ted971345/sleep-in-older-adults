@@ -41,6 +41,16 @@ export const canSubmitStep = (
     return selectedOptionIds.length === 1;
   }
 
+  if (
+    (step.kind === "red-flags" || step.kind === "recommendations") &&
+    step.maxSelections !== undefined
+  ) {
+    return (
+      selectedOptionIds.length > 0 &&
+      selectedOptionIds.length <= step.maxSelections
+    );
+  }
+
   return selectedOptionIds.length > 0;
 };
 
@@ -73,7 +83,9 @@ export const evaluateStep = (
       possible: 0,
       matchedOptionIds: [],
       missedOptionIds: [],
+      incorrectOptionIds: [],
       misplacedOptionIds: [],
+      penalty: 0,
     };
   }
 
@@ -91,21 +103,31 @@ export const evaluateStep = (
       possible: targets.length,
       matchedOptionIds,
       missedOptionIds: targets.filter((id) => !selectedOptionIds.includes(id)),
+      incorrectOptionIds: [],
       misplacedOptionIds,
+      penalty: 0,
     };
   }
 
   const matchedOptionIds = selectedOptionIds.filter((id) =>
     targets.includes(id),
   );
+  const incorrectOptionIds = selectedOptionIds.filter(
+    (id) => !targets.includes(id),
+  );
+  const penalty =
+    step.kind === "classification" ? 0 : incorrectOptionIds.length * 0.5;
+  const earned = Math.max(0, matchedOptionIds.length - penalty);
 
   return {
     stepId: step.id,
-    earned: matchedOptionIds.length,
+    earned,
     possible: targets.length,
     matchedOptionIds,
     missedOptionIds: targets.filter((id) => !selectedOptionIds.includes(id)),
+    incorrectOptionIds,
     misplacedOptionIds: [],
+    penalty,
   };
 };
 
@@ -144,12 +166,19 @@ const scoreDomain = (
   const missedOptionIds = targetOptionIds.filter(
     (id) => !selectedOptionIds.has(id),
   );
+  const selectedCount = selectedOptionIds.size;
+  const unrelatedSelectionCount = Math.max(
+    0,
+    selectedCount - identifiedOptionIds.length,
+  );
+  const rawScore =
+    targetOptionIds.length === 0
+      ? 0
+      : (identifiedOptionIds.length / targetOptionIds.length) * maxPoints;
+  const penalty = Math.min(maxPoints, unrelatedSelectionCount * 0.25);
 
   return {
-    earnedPoints:
-      targetOptionIds.length === 0
-        ? 0
-        : Math.round((identifiedOptionIds.length / targetOptionIds.length) * maxPoints),
+    earnedPoints: Math.max(0, Math.round(rawScore - penalty)),
     identifiedOptionIds,
     missedOptionIds,
   };

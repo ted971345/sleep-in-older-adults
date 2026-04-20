@@ -39,6 +39,7 @@ export type SelectionStep = ReasoningStepBase & {
   kind: "classification" | "red-flags" | "recommendations";
   options: SelectableOption[];
   correctOptionIds: string[];
+  maxSelections?: number;
 };
 
 export type PrioritizationStep = ReasoningStepBase & {
@@ -69,7 +70,9 @@ export type StepEvaluation = {
   possible: number;
   matchedOptionIds: string[];
   missedOptionIds: string[];
+  incorrectOptionIds: string[];
   misplacedOptionIds: string[];
+  penalty: number;
 };
 
 export type FeedbackDomainId =

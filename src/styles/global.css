@@ -801,6 +801,12 @@ h2 {
   padding-left: var(--space-3);
 }
 
+.feedback-caution {
+  border-left: 6px solid var(--color-coral);
+  background: #fff7f3;
+  padding: var(--space-3);
+}
+
 .feedback-item p {
   margin-bottom: 0;
 }

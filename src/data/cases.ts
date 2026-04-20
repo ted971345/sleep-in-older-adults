@@ -110,7 +110,18 @@ const selectionStep = (
   instruction: string,
   options: SelectableOption[],
   correctOptionIds: string[],
-): SelectionStep => ({ id, kind, title, instruction, options, correctOptionIds });
+): SelectionStep => ({
+  id,
+  kind,
+  title,
+  instruction,
+  options,
+  correctOptionIds,
+  maxSelections:
+    kind === "red-flags" || kind === "recommendations"
+      ? correctOptionIds.length
+      : undefined,
+});
 
 const prioritizationStep = (
   id: string,

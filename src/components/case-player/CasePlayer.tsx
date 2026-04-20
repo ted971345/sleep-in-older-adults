@@ -105,6 +105,13 @@ export const CasePlayer = ({ caseItem }: CasePlayerProps) => {
       if (step.kind === "follow-up") {
         nextSelection = nextSelection.slice(0, step.maxSelections);
       }
+
+      if (
+        (step.kind === "red-flags" || step.kind === "recommendations") &&
+        step.maxSelections !== undefined
+      ) {
+        nextSelection = nextSelection.slice(0, step.maxSelections);
+      }
     }
 
     setResponses((current) => updateResponse(current, step.id, nextSelection));
