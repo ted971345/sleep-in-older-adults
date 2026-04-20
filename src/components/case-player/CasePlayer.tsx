@@ -190,7 +190,7 @@ export const CasePlayer = ({ caseItem }: CasePlayerProps) => {
       </div>
 
       <div className="score-strip">
-        <span>Current reasoning score</span>
+        <span>Step accuracy score</span>
         <strong>
           {totalEvaluation.earned}/{totalEvaluation.possible || 0}
           {totalEvaluation.possible > 0 ? ` (${totalEvaluation.percent}%)` : ""}
